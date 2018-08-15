@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">sudokuCalculator</string>
+
+    <string name="less">LESS</string>
+
+    <string name="more">MORE</string>
+
+    <string name="countStep">you are curently on step : </string>
+
+    <string name="allStep">count of steps is : </string>
+</resources>
