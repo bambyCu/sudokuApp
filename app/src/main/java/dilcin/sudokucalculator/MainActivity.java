@@ -2,6 +2,7 @@ package dilcin.sudokucalculator;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -28,8 +29,57 @@ import javax.xml.transform.Source;
 import static dilcin.sudokucalculator.R.string.allStep;
 
 public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        /*SudokuMaster sudokuMaster = new SudokuMaster();
+        List<int[][]> data = new Database().getSudokuFields();
+        sudokuMaster.calculate(data.get(3));
+        sudokuMaster.printOutSudokuField();
+        sudokuMaster.printGuessPyramidList();*/
+        workWithDatabase();
+}
+
+
+void workWithDatabase() {
+    SudokuMaster sudokuMaster = new SudokuMaster();
+    List<int[][]> data = new Database().getSudokuFields();
+    List<Boolean> difficulty = new ArrayList<Boolean>();
+
+    List<Long> acomplishedTime = new ArrayList<Long>();
+    System.out.println("datasize is " + data.size());
+    for (int i = 0; i < data.size(); i++) {
+        long tempTime = SystemClock.currentThreadTimeMillis();
+        sudokuMaster.calculate(data.get(i));
+
+        tempTime = SystemClock.currentThreadTimeMillis() - tempTime;
+        difficulty.add(sudokuMaster.isFieldGuessed());
+
+        acomplishedTime.add(tempTime);
+
+        System.out.println("computing time of sudoku number :" + i);
+
+        System.out.println(tempTime);
+    }
+    System.out.println("times : ");
+    System.out.println("datasize is " + data.size());
+    for (int i = 0; i < acomplishedTime.size(); i++) {
+        if (difficulty.get(i)) {
+            System.out.println(acomplishedTime.get(i) + ", was guessed, HARD");
+        } else if (!difficulty.get(i)) {
+            System.out.println(acomplishedTime.get(i) + ", was not guessed, EASY");
+        }
+
+    }
+}
+}
+/*public class MainActivity extends AppCompatActivity {
     SudokuMaster sudokuMaster;
     List<EditText> boxes;
+
+
     /*int sudokuField[][] = { {3,0,0,0,0,0,0,0,8},
             {0,0,8,5,1,6,9,0,3},
             {0,9,6,0,0,0,1,7,5},
@@ -39,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             {0,6,9,0,0,0,7,1,0},
             {0,0,4,6,7,2,8,0,9},
             {5,0,0,0,0,0,0,0,2}};*/
-    int step = 0;
+    //int step = 0;
     /*int sudokuField[][] = { {1,0,3,0,0,0,6,0,7},
                             {0,0,2,0,5,0,3,0,0},
                             {9,6,7,0,3,0,4,5,2},
@@ -59,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
             {0,2,0,0,0,0,0,8,0},
             {7,0,3,0,8,0,2,0,6},
             {0,1,0,0,3,0,0,5,0},};*/
-    int sudokuField[][] = {
+    /*
+    * int sudokuField[][] = {
             {0,0,2,0,4,0,5,0,0},
             {8,0,0,6,0,5,0,0,9},
             {7,0,0,3,0,8,0,0,6},
@@ -68,8 +119,49 @@ public class MainActivity extends AppCompatActivity {
             {0,2,0,0,0,0,0,5,0},
             {2,0,0,1,0,4,0,0,7},
             {5,0,0,9,0,3,0,0,8},
-            {0,0,1,0,8,0,3,0,0},};
-   /* int sudokuField[][] = {
+            {0,0,1,0,8,0,3,0,0},};*/
+    /*int sudokuField[][] = {
+            {8,0,0,0,0,0,0,0,0},
+            {0,0,3,6,0,0,0,0,0},
+            {0,7,0,0,9,0,2,0,0},
+            {0,5,0,0,0,7,0,0,0},
+            {0,0,0,0,4,5,7,0,0},
+            {0,0,0,1,0,0,0,3,0},
+            {0,0,1,0,0,0,0,6,8},
+            {0,0,8,5,0,0,0,1,0},
+            {0,9,0,0,0,0,4,0,0},};
+             hardest sudoku ever*/
+    /*int sudokuField[][] = {
+            {7,0,0,0,1,0,0,0,0},
+            {0,0,0,0,0,0,0,4,0},
+            {2,9,0,0,0,0,0,5,7},
+            {0,0,9,8,0,6,1,0,0},
+            {6,0,0,0,0,0,0,0,0},
+            {0,2,8,0,4,0,0,0,0},
+            {0,3,0,7,0,0,0,0,8},
+            {0,8,2,0,5,0,0,0,0},
+            {0,0,0,1,2,0,3,0,0},}; very very hard*/
+    /*int sudokuField[][] = {
+            {0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0},};*/
+    /*int sudokuField[][] = {
+            {2,3,5,0,0,0,0,9,0},
+            {0,6,0,9,7,0,0,2,0},
+            {0,4,0,0,0,0,1,0,0},
+            {0,7,0,1,0,0,6,0,0},
+            {0,0,0,0,9,0,0,0,0},
+            {0,0,6,0,0,4,0,8,0},
+            {0,0,9,0,0,0,0,7,0},
+            {0,2,0,0,3,6,0,4,0},
+            {0,1,0,0,0,0,2,6,5},};*/
+    /*int sudokuField[][] = {
             {0,0,8,0,0,0,2,0,0},
             {7,0,0,2,0,8,0,0,5},
             {0,6,0,0,7,0,0,9,0},
@@ -78,8 +170,8 @@ public class MainActivity extends AppCompatActivity {
             {0,0,4,0,3,0,1,0,0},
             {0,8,0,9,0,6,0,3,0},
             {1,0,0,0,0,0,0,0,2},
-            {0,0,0,5,1,2,0,0,0},};*/
-    @Override
+            {0,0,0,5,1,2,0,0,0},};
+   /* @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -225,6 +317,7 @@ public class MainActivity extends AppCompatActivity {
                                                             /*InputFilter[] filters = new InputFilter[1];
                                                             filters[0] = new InputFilter.LengthFilter(1);
                                                             boxes.get(b+(a*9)).setFilters(filters);*/
+    /*
                                                             boxes.get(b+(a*9)).setLayoutParams(params);
                                                             boxes.get(b+(a*9)).setBackgroundColor(getResources().getColor(R.color.box));
                                                             boxes.get(b+(a*9)).setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -256,6 +349,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }*/
+    /*
     void setOutput(int temp[][])
     {
         for(int i = 0;i < 9;i++)
@@ -293,7 +387,12 @@ public class MainActivity extends AppCompatActivity {
                 tempInput[a][b] = input[a][b];
             }
         }
+        System.out.println("start time");
+        System.out.println(SystemClock.currentThreadTimeMillis());
+
         int [][]  temp = sudokuMaster.calculate(input);
+        System.out.println("end time");
+        System.out.println(SystemClock.currentThreadTimeMillis());
         for(int i = 0;i < 9;i++)
         {
             for(int j = 0;j < 9;j++)
@@ -384,7 +483,7 @@ public class MainActivity extends AppCompatActivity {
                 boxes.get((i*9)+j).setBackgroundColor(getResources().getColor(R.color.box));
             }
         }
-    }
+    }*/
   /*  class changeText implements TextWatcher {
         int numOfSquare = 0;
 
@@ -405,5 +504,5 @@ public class MainActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
                 boxes.get(numOfSquare).setText();
         }
-    }*/
-}
+    }
+}*/
